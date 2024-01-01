@@ -6,8 +6,8 @@ Gem::Specification.new do |spec|
   spec.authors = ["The Karimado Team"]
   spec.email = []
   spec.homepage = "https://github.com/souk4711/karimado-server-packs-rails"
-  spec.summary = ""
-  spec.description = ""
+  spec.summary = "Karimado Server Packages + Rails"
+  spec.description = "Karimado Server Packages + Rails"
   spec.license = "LGPL"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the "allowed_push_host"
@@ -22,5 +22,6 @@ Gem::Specification.new do |spec|
     Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.md"]
   end
 
+  spec.add_dependency "bcrypt"
   spec.add_dependency "rails", ">= 7.1.2"
 end

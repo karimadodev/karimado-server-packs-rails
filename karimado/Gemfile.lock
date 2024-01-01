@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     karimado (0.1.0)
+      bcrypt
       rails (>= 7.1.2)
 
 GEM
@@ -84,18 +85,28 @@ GEM
     ast (2.4.2)
     backport (1.2.0)
     base64 (0.2.0)
+    bcrypt (3.1.20)
     benchmark (0.3.0)
     bigdecimal (3.1.5)
     builder (3.2.4)
     concurrent-ruby (1.2.2)
     connection_pool (2.4.1)
     crass (1.0.6)
+    database_cleaner-active_record (2.1.0)
+      activerecord (>= 5.a)
+      database_cleaner-core (~> 2.0.0)
+    database_cleaner-core (2.0.1)
     date (3.3.4)
     diff-lcs (1.5.0)
     drb (2.2.0)
       ruby2_keywords
     e2mmap (0.1.0)
     erubi (1.12.0)
+    factory_bot (6.4.5)
+      activesupport (>= 5.0.0)
+    factory_bot_rails (6.4.3)
+      factory_bot (~> 6.4)
+      railties (>= 5.0.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.1)
@@ -243,6 +254,8 @@ GEM
       rubocop-ast (>= 1.30.0, < 2.0)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
+    shoulda-matchers (6.0.0)
+      activesupport (>= 5.2.0)
     solargraph (0.50.0)
       backport (~> 1.2)
       benchmark
@@ -300,12 +313,15 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  database_cleaner-active_record
+  factory_bot_rails
   karimado!
   puma
   redcarpet
   rspec
   rspec-rails
   rubocop
+  shoulda-matchers
   solargraph
   sqlite3
   standard
