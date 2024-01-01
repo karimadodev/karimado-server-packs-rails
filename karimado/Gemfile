@@ -1,0 +1,23 @@
+source "https://rubygems.org"
+
+# Specify your gem's dependencies in karimado.gemspec.
+gemspec
+
+# lint
+gem "rubocop"
+gem "standard"
+
+# test
+gem "rspec"
+gem "rspec-rails"
+
+# doc
+gem "yard"
+gem "redcarpet"
+
+# lsp
+gem "solargraph"
+
+# web development
+gem "puma"
+gem "sqlite3"
