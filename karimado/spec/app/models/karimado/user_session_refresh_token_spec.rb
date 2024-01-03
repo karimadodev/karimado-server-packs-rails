@@ -11,12 +11,13 @@ RSpec.describe Karimado::UserSessionRefreshToken, type: :model do
       expect(token).to be_a(String)
 
       token = described_class.decode(token)
-      expect(token.sub).to eq(session.user.id.to_s)
+      expect(token.sub).to eq(session.user.public_id)
       expect(token.iat).to eq(now.to_i)
       expect(token.exp).to eq(now.to_i + expires_in.to_i)
       expect(token.grant_type).to eq("refresh_token")
       expect(token.refresh_token).to eq(session.refresh_token_base)
-      expect(token.session_id).to eq(session.id)
+      expect(token.user).to eq(session.user)
+      expect(token.session).to eq(session)
     end
   end
 

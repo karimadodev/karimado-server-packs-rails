@@ -1,9 +1,12 @@
 module Karimado
   class UserSession < ApplicationRecord
+    include Models::HasPublicId
+
     belongs_to :user
 
-    has_secure_token :access_token_base, length: 36
-    has_secure_token :refresh_token_base, length: 36
+    has_public_id :public_id
+    has_secure_token :access_token_base
+    has_secure_token :refresh_token_base
 
     class << self
       def access_token_expires_in

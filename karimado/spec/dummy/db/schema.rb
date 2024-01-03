@@ -23,20 +23,23 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_01_092045) do
   end
 
   create_table "karimado_user_sessions", force: :cascade do |t|
+    t.string "public_id", null: false
     t.string "access_token_base", null: false
     t.string "refresh_token_base", null: false
+    t.datetime "revoked_at"
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["access_token_base"], name: "index_karimado_user_sessions_on_access_token_base", unique: true
-    t.index ["refresh_token_base"], name: "index_karimado_user_sessions_on_refresh_token_base", unique: true
+    t.index ["public_id"], name: "index_karimado_user_sessions_on_public_id", unique: true
     t.index ["user_id"], name: "index_karimado_user_sessions_on_user_id"
   end
 
   create_table "karimado_users", force: :cascade do |t|
+    t.string "public_id", null: false
     t.string "uid", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["public_id"], name: "index_karimado_users_on_public_id", unique: true
     t.index ["uid"], name: "index_karimado_users_on_uid", unique: true
   end
 

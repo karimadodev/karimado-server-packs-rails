@@ -6,17 +6,17 @@ module Karimado
 
     attr_accessor :sub, :iat, :exp
     attr_accessor :grant_type, :access_token
-    attr_accessor :session_id
+    attr_accessor :sid
 
     class << self
       def encode(session, expires_in:)
         ::JWT.encode({
-          sub: session.user.id.to_s,
+          sub: session.user.public_id,
           iat: Time.now.to_i,
           exp: expires_in.from_now.to_i,
           grant_type: "access_token",
           access_token: session.access_token_base,
-          session_id: session.id
+          sid: session.public_id
         }, hmac_secret, "HS256")
       end
 
@@ -41,6 +41,14 @@ module Karimado
       def hmac_secret
         ::Rails.application.secret_key_base
       end
+    end
+
+    def user
+      User.find_by(public_id: sub)
+    end
+
+    def session
+      UserSession.find_by(public_id: sid)
     end
   end
 end

@@ -1,8 +1,10 @@
 class CreateKarimadoUserSessions < ActiveRecord::Migration[7.1]
   def change
     create_table :karimado_user_sessions do |t|
-      t.string :access_token_base, null: false, index: {unique: true}
-      t.string :refresh_token_base, null: false, index: {unique: true}
+      t.string :public_id, null: false, index: {unique: true}
+      t.string :access_token_base, null: false
+      t.string :refresh_token_base, null: false
+      t.datetime :revoked_at
 
       t.references :user, null: false, foreign_key: false
 
