@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :user, class: Karimado::User do
-    name { "John Doe" }
+    uid { SecureRandom.alphanumeric(8) }
   end
 end

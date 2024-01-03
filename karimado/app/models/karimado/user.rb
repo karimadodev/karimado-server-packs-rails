@@ -3,6 +3,7 @@ module Karimado
     has_many :user_authentications
     has_many :user_sessions
 
-    validates :name, presence: true
+    validates :uid, presence: true
+    validates :uid, uniqueness: true
   end
 end

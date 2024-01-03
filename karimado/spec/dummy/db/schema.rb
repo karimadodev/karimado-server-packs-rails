@@ -18,23 +18,26 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_01_092045) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["provider", "uid"], name: "index_karimado_user_authentications_on_provider_and_uid", unique: true
+    t.index ["user_id", "provider"], name: "index_karimado_user_authentications_on_user_id_and_provider", unique: true
     t.index ["user_id"], name: "index_karimado_user_authentications_on_user_id"
   end
 
   create_table "karimado_user_sessions", force: :cascade do |t|
-    t.string "sid", null: false
-    t.string "access_token", null: false
+    t.string "access_token_base", null: false
+    t.string "refresh_token_base", null: false
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["access_token"], name: "index_karimado_user_sessions_on_access_token", unique: true
-    t.index ["sid"], name: "index_karimado_user_sessions_on_sid", unique: true
+    t.index ["access_token_base"], name: "index_karimado_user_sessions_on_access_token_base", unique: true
+    t.index ["refresh_token_base"], name: "index_karimado_user_sessions_on_refresh_token_base", unique: true
     t.index ["user_id"], name: "index_karimado_user_sessions_on_user_id"
   end
 
   create_table "karimado_users", force: :cascade do |t|
-    t.string "name", null: false
+    t.string "uid", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["uid"], name: "index_karimado_users_on_uid", unique: true
   end
+
 end

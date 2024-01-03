@@ -6,4 +6,5 @@ inherit_gem:
 AllCops:
   SuggestExtensions: false
   Exclude:
-    - 'bin/**/*'
+    - "bin/**/*"
+    - "spec/dummy/db/schema.rb"

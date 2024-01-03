@@ -23,5 +23,6 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_dependency "bcrypt"
+  spec.add_dependency "jwt"
   spec.add_dependency "rails", ">= 7.1.2"
 end

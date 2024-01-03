@@ -5,6 +5,8 @@ RSpec.describe Karimado::User, type: :model do
   end
 
   describe "validations" do
-    it { is_expected.to validate_presence_of(:name) }
+    subject { FactoryBot.build(:user) }
+    it { is_expected.to validate_presence_of(:uid) }
+    it { is_expected.to validate_uniqueness_of(:uid) }
   end
 end
