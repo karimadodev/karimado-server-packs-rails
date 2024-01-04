@@ -1,5 +1,3 @@
-require "jwt"
-
 module Karimado
   class UserSessionRefreshToken
     include ActiveModel::Model

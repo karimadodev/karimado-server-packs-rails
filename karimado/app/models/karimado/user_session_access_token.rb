@@ -1,5 +1,3 @@
-require "jwt"
-
 module Karimado
   class UserSessionAccessToken
     include ActiveModel::Model

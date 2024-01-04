@@ -1,5 +1,6 @@
 module Karimado
   class UserSession < ApplicationRecord
+    include Discard::Model
     include Models::HasPublicId
 
     belongs_to :user
@@ -8,23 +9,23 @@ module Karimado
     has_secure_token :access_token_base
     has_secure_token :refresh_token_base
 
-    class << self
-      def access_token_expires_in
-        1.hour
-      end
+    def authn_token
+      access_token_expires_in = Karimado.configuration.authn.access_token_expires_in
+      refresh_token_expires_in = Karimado.configuration.authn.refresh_token_expires_in
 
-      def refresh_token_expires_in
-        1.day
-      end
+      {
+        access_token: access_token(expires_in: access_token_expires_in),
+        access_token_expires_in:,
+        refresh_token: refresh_token(expires_in: refresh_token_expires_in),
+        refresh_token_expires_in:
+      }
     end
 
-    def access_token(expires_in: nil)
-      expires_in ||= self.class.access_token_expires_in
+    def access_token(expires_in:)
       UserSessionAccessToken.encode(self, expires_in:)
     end
 
-    def refresh_token(expires_in: nil)
-      expires_in ||= self.class.refresh_token_expires_in
+    def refresh_token(expires_in:)
       UserSessionRefreshToken.encode(self, expires_in:)
     end
   end

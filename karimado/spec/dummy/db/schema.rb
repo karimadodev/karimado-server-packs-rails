@@ -26,10 +26,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_01_092045) do
     t.string "public_id", null: false
     t.string "access_token_base", null: false
     t.string "refresh_token_base", null: false
-    t.datetime "revoked_at"
+    t.datetime "discarded_at"
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["discarded_at"], name: "index_karimado_user_sessions_on_discarded_at"
     t.index ["public_id"], name: "index_karimado_user_sessions_on_public_id", unique: true
     t.index ["user_id"], name: "index_karimado_user_sessions_on_user_id"
   end
