@@ -13,7 +13,11 @@ module Karimado
 
         def render_failure(code_or_message = nil, message = nil, status: nil)
           resp =
-            if code_or_message.is_a?(Symbol) || code_or_message.is_a?(Numeric)
+            if code_or_message.is_a?(Symbol)
+              raise ArgumentError if code_or_message == :ok
+              Karimado::API::Response.new(code_or_message, message)
+            elsif code_or_message.is_a?(Numeric)
+              raise ArgumentError if code_or_message == 0
               Karimado::API::Response.new(code_or_message, message)
             else
               Karimado::API::Response.new(:error, message || code_or_message)
