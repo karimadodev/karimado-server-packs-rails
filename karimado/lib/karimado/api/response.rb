@@ -1,7 +1,7 @@
 module Karimado
   module API
     class Response
-      def initialize(code, message, data: nil)
+      def initialize(code, message = nil, data: nil)
         @code = Code.new(code)
         @message = message
         @data = data
