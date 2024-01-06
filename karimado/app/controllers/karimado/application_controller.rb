@@ -1,6 +1,6 @@
 module Karimado
   class ApplicationController < ActionController::API
-    include Controllers::Authentication
-    include Controllers::Rendering
+    include Karimado::Concerns::Controllers::Authentication
+    include Karimado::Concerns::Controllers::Rendering
   end
 end

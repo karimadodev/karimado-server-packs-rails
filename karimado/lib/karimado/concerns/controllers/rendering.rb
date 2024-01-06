@@ -1,18 +1,25 @@
 module Karimado
-  module Controllers
-    module Rendering
-      extend ActiveSupport::Concern
+  module Concerns
+    module Controllers
+      module Rendering
+        extend ActiveSupport::Concern
 
-      def render_success(data = {}, message: nil, status: nil)
-        message ||= "ok"
-        status ||= :ok
-        render(json: {code: 0, message:, data:}, status:)
-      end
+        private
 
-      def render_failure(errors = {}, code: 1, message: nil, status: nil)
-        message ||= "err"
-        status ||= :internal_server_error
-        render(json: {code:, message:, errors:}, status:)
+        def render_success(data = nil, status: nil)
+          resp = Karimado::API::Response.new(:ok, nil, data:)
+          render(json: resp, status: status || :ok)
+        end
+
+        def render_failure(code_or_message = nil, message = nil, status: nil)
+          resp =
+            if code_or_message.is_a?(Symbol) || code_or_message.is_a?(Numeric)
+              Karimado::API::Response.new(code_or_message, message)
+            else
+              Karimado::API::Response.new(:error, message || code_or_message)
+            end
+          render(json: resp, status: status || :internal_server_error)
+        end
       end
     end
   end

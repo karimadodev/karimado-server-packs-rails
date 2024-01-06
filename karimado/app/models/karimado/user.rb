@@ -1,6 +1,6 @@
 module Karimado
   class User < ApplicationRecord
-    include Models::HasPublicId
+    include Karimado::Concerns::Models::HasPublicId
 
     has_many :user_authentications
     has_many :user_sessions

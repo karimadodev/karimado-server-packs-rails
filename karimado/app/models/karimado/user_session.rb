@@ -1,7 +1,7 @@
 module Karimado
   class UserSession < ApplicationRecord
     include Discard::Model
-    include Models::HasPublicId
+    include Karimado::Concerns::Models::HasPublicId
 
     belongs_to :user
 

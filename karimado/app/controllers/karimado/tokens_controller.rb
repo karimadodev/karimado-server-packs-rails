@@ -3,21 +3,22 @@ module Karimado
     skip_before_action :authenticate_user!, only: [:create, :refresh]
 
     def create
-      user = User.find_or_create_by!(uid: "karimado")
-      session = user.user_sessions.create!
-      render_success(session.authn_token)
+      Authn::Token::CreateService.call({
+        username: params[:username],
+        password: params[:password]
+      })
     end
 
     def refresh
-      token = UserSessionRefreshToken.decode(params[:token])
-      session = token.session
-      render_success(session.authn_token)
+      Authn::Token::RefreshService.call({
+        refresh_token: params[:token]
+      })
     end
 
     def revoke
-      session = current_user_session
-      session.undiscarded? && session.discard!
-      render_success
+      Authn::Token::RevokeService.call({
+        access_token: karimado_access_token
+      })
     end
   end
 end

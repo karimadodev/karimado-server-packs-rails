@@ -1,32 +1,34 @@
 module Karimado
-  module Controllers
-    module Authentication
-      extend ActiveSupport::Concern
+  module Concerns
+    module Controllers
+      module Authentication
+        extend ActiveSupport::Concern
 
-      included do
-        before_action :authenticate_user!
-      end
+        included do
+          before_action :authenticate_user!
+        end
 
-      private
+        private
 
-      def authenticate_user!
-        render_failure(status: :unauthorized) if current_user.blank?
-      end
+        def authenticate_user!
+          render_failure(:unauthorized) if current_user.nil?
+        end
 
-      def current_user
-        @current_user ||= karimado_token&.user
-      end
+        def current_user
+          @_current_user ||= karimado_access_token&.user
+        end
 
-      def current_user_session
-        @current_user_session ||= karimado_token&.session
-      end
+        def current_user_session
+          @_current_user_session ||= karimado_access_token&.session
+        end
 
-      def karimado_token
-        return @_karimado_token if defined?(@_karimado_token)
-        @_karimado_token = begin
-          header = request.headers["Authorization"].to_s
-          token = header.sub(/^Bearer\s+/, "")
-          token && UserSessionAccessToken.decode(token)
+        def karimado_access_token
+          return @_karimado_access_token if defined?(@_karimado_access_token)
+          @_karimado_access_token = begin
+            header = request.headers["Authorization"].to_s
+            token = header.sub(/^Bearer\s+/, "")
+            token && UserSessionAccessToken.decode(token)
+          end
         end
       end
     end
