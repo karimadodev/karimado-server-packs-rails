@@ -19,7 +19,7 @@ module Karimado
         @data || {}
       end
 
-      def to_json
+      def to_json(...)
         if code == 0
           {code:, message:, data:}
         else

@@ -1,4 +1,4 @@
-RSpec.describe Karimado::Concerns::Services::Callable do
+RSpec.describe Karimado::Concerns::Services::Callable, type: :service do
   describe ".call" do
     it "is expected to return last evaluated value" do
       r = Class.new do

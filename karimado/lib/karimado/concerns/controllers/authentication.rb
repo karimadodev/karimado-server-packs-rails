@@ -27,10 +27,17 @@ module Karimado
 
         def karimado_access_token
           return @_karimado_access_token if defined?(@_karimado_access_token)
+
           @_karimado_access_token = begin
             header = request.headers["Authorization"].to_s
             token = header.sub(/^Bearer\s+/, "")
-            token && UserSessionAccessToken.decode(token)
+            token.blank? ? nil : (
+              begin
+                UserSessionAccessToken.decode(token)
+              rescue Errors::InvalidToken
+                nil
+              end
+            )
           end
         end
       end

@@ -8,7 +8,7 @@ module Karimado
 
         def render_success(data = nil, status: nil)
           resp = API::Response.new(:ok, nil, data:)
-          render(json: resp, status: status || :ok)
+          render(json: resp.to_json, status: status || :ok)
         end
 
         def render_failure(code_or_message = nil, message = nil, status: nil)
@@ -22,7 +22,7 @@ module Karimado
             else
               API::Response.new(:error, message || code_or_message)
             end
-          render(json: resp, status: status || :internal_server_error)
+          render(json: resp.to_json, status: status || :internal_server_error)
         end
       end
     end
