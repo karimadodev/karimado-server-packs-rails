@@ -4,8 +4,17 @@ module Karimado
       module Callable
         extend ActiveSupport::Concern
 
-        included do
+        included do |base|
           attr_accessor :_karimado_result
+
+          base.const_set("Error", Class.new(StandardError) do
+            attr_reader :result
+
+            def initialize(result)
+              @result = result
+              super(@result)
+            end
+          end)
         end
 
         module ClassMethods
@@ -13,16 +22,23 @@ module Karimado
             new.tap do |instance|
               catch(:_karimado_done) do
                 value = instance.call(...)
-                instance._karimado_result = value.is_a?(Result) ? value : success_result(value)
+                instance._karimado_result = value.is_a?(Result) ? value : karimado_success_result(value)
               end
             end._karimado_result
           end
 
-          def success_result(value)
+          def call!(...)
+            call(...).tap do |result|
+              break result if result.success?
+              raise const_get("Error").new(result)
+            end
+          end
+
+          def karimado_success_result(value)
             Result.new(:ok, nil, value: value)
           end
 
-          def failure_result(code_or_message, message)
+          def karimado_failure_result(code_or_message, message)
             if code_or_message.is_a?(Symbol)
               raise ArgumentError if code_or_message == :ok
               Result.new(code_or_message, message)
@@ -38,12 +54,12 @@ module Karimado
         private
 
         def success!(value = nil)
-          @_karimado_result = self.class.success_result(value)
+          @_karimado_result = self.class.karimado_success_result(value)
           throw :_karimado_done
         end
 
         def fail!(code_or_message = nil, message = nil)
-          @_karimado_result = self.class.failure_result(code_or_message, message)
+          @_karimado_result = self.class.karimado_failure_result(code_or_message, message)
           throw :_karimado_done
         end
       end
@@ -63,6 +79,10 @@ module Karimado
 
         def failure?
           !success?
+        end
+
+        def to_s
+          (message || code).to_s
         end
       end
     end
