@@ -53,12 +53,12 @@ module Karimado
 
         private
 
-        def success!(value = nil)
+        def ok!(value = nil)
           @_karimado_result = self.class.karimado_success_result(value)
           throw :_karimado_done
         end
 
-        def fail!(code_or_message = nil, message = nil)
+        def error!(code_or_message = nil, message = nil)
           @_karimado_result = self.class.karimado_failure_result(code_or_message, message)
           throw :_karimado_done
         end

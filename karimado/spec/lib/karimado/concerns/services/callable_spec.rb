@@ -15,12 +15,12 @@ RSpec.describe Karimado::Concerns::Services::Callable, type: :service do
       expect(r.value).to eq(2)
     end
 
-    it "is expected to return #success! result" do
+    it "is expected to return #ok! result" do
       r = Class.new do
         include Karimado::Concerns::Services::Callable
 
         def call
-          success!
+          ok!
           "unreachable"
         end
       end.call
@@ -31,12 +31,12 @@ RSpec.describe Karimado::Concerns::Services::Callable, type: :service do
       expect(r.value).to be_nil
     end
 
-    it "is expected to return #success! result with value" do
+    it "is expected to return #ok! result with value" do
       r = Class.new do
         include Karimado::Concerns::Services::Callable
 
         def call
-          success!(a: 1)
+          ok!(a: 1)
           "unreachable"
         end
       end.call
@@ -47,12 +47,12 @@ RSpec.describe Karimado::Concerns::Services::Callable, type: :service do
       expect(r.value).to eq({a: 1})
     end
 
-    it "is expected to return #fail! result" do
+    it "is expected to return #error! result" do
       r = Class.new do
         include Karimado::Concerns::Services::Callable
 
         def call
-          fail!
+          error!
           "unreachable"
         end
       end.call
@@ -63,12 +63,12 @@ RSpec.describe Karimado::Concerns::Services::Callable, type: :service do
       expect(r.value).to be_nil
     end
 
-    it "is expected to return #fail! result with code" do
+    it "is expected to return #error! result with code" do
       r = Class.new do
         include Karimado::Concerns::Services::Callable
 
         def call
-          fail! :unauthorized
+          error! :unauthorized
           "unreachable"
         end
       end.call
@@ -79,12 +79,12 @@ RSpec.describe Karimado::Concerns::Services::Callable, type: :service do
       expect(r.value).to be_nil
     end
 
-    it "is expected to return #fail! result with message" do
+    it "is expected to return #error! result with message" do
       r = Class.new do
         include Karimado::Concerns::Services::Callable
 
         def call
-          fail! "authorization is required"
+          error! "authorization is required"
           "unreachable"
         end
       end.call
@@ -95,12 +95,12 @@ RSpec.describe Karimado::Concerns::Services::Callable, type: :service do
       expect(r.value).to be_nil
     end
 
-    it "is expected to return #fail! result with code & message" do
+    it "is expected to return #error! result with code & message" do
       r = Class.new do
         include Karimado::Concerns::Services::Callable
 
         def call
-          fail! :unauthorized, "authorization is required"
+          error! :unauthorized, "authorization is required"
           "unreachable"
         end
       end.call
@@ -111,12 +111,12 @@ RSpec.describe Karimado::Concerns::Services::Callable, type: :service do
       expect(r.value).to be_nil
     end
 
-    it "is expected to raise error when #fail! with :ok code" do
+    it "is expected to raise error when #error! with :ok code" do
       klass = Class.new do
         include Karimado::Concerns::Services::Callable
 
         def call(code)
-          fail! code
+          error! code
           "unreachable"
         end
       end
@@ -150,12 +150,12 @@ RSpec.describe Karimado::Concerns::Services::Callable, type: :service do
       expect(r.value).to eq(2)
     end
 
-    it "is expected to return #success! result" do
+    it "is expected to return #ok! result" do
       r = Class.new do
         include Karimado::Concerns::Services::Callable
 
         def call
-          success!
+          ok!
           "unreachable"
         end
       end.call!
@@ -166,12 +166,12 @@ RSpec.describe Karimado::Concerns::Services::Callable, type: :service do
       expect(r.value).to be_nil
     end
 
-    it "is expected to raise error when #fail!" do
+    it "is expected to raise error when #error!" do
       klass = Class.new do
         include Karimado::Concerns::Services::Callable
 
         def call
-          fail!
+          error!
         end
       end
 
