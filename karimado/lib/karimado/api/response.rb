@@ -19,6 +19,16 @@ module Karimado
         @data || {}
       end
 
+      def http_status
+        case code
+        when 0 then 200
+        when 1 then 400
+        when 1_400_000..1_499_999 then code.div(1_000) - 1_000
+        when 1_500_000..1_599_999 then code.div(1_000) - 1_000
+        else raise ArgumentError
+        end
+      end
+
       def to_json(...)
         if code == 0
           {code:, message:, data:}

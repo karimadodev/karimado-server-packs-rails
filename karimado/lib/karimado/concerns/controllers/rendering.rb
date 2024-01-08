@@ -6,12 +6,12 @@ module Karimado
 
         private
 
-        def render_success(data = nil, status: nil)
+        def render_success(data = nil)
           resp = API::Response.new(:ok, nil, data:)
-          render(json: resp.to_json, status: status || :ok)
+          render(json: resp.to_json, status: resp.http_status)
         end
 
-        def render_failure(code_or_message = nil, message = nil, status: nil)
+        def render_failure(code_or_message = nil, message = nil)
           resp =
             if code_or_message.is_a?(Symbol)
               raise ArgumentError if code_or_message == :ok
@@ -22,7 +22,7 @@ module Karimado
             else
               API::Response.new(:error, message || code_or_message)
             end
-          render(json: resp.to_json, status: status || :internal_server_error)
+          render(json: resp.to_json, status: resp.http_status)
         end
       end
     end

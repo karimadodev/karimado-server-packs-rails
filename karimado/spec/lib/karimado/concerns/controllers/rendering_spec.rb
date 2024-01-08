@@ -17,7 +17,7 @@ RSpec.describe Karimado::Concerns::Controllers::Rendering, type: :controller do
     end
 
     def failure_code
-      render_failure(:unauthorized, status: 401)
+      render_failure(:unauthorized)
     end
 
     def failure_message
@@ -25,7 +25,7 @@ RSpec.describe Karimado::Concerns::Controllers::Rendering, type: :controller do
     end
 
     def failure_code_message
-      render_failure(:unauthorized, "Login Required", status: 401)
+      render_failure(:unauthorized, "Login Required")
     end
   end
 
@@ -68,7 +68,7 @@ RSpec.describe Karimado::Concerns::Controllers::Rendering, type: :controller do
     it "is expected to response #failure" do
       get :failure
 
-      expect(response.status).to eq(500)
+      expect(response.status).to eq(400)
       expect(response.parsed_body).to eq({
         "code" => 1,
         "message" => "ERROR"
@@ -80,7 +80,7 @@ RSpec.describe Karimado::Concerns::Controllers::Rendering, type: :controller do
 
       expect(response.status).to eq(401)
       expect(response.parsed_body).to eq({
-        "code" => 10401,
+        "code" => 1_401_000,
         "message" => "Unauthorized"
       })
     end
@@ -88,7 +88,7 @@ RSpec.describe Karimado::Concerns::Controllers::Rendering, type: :controller do
     it "is expected to response #failure with message" do
       get :failure_message
 
-      expect(response.status).to eq(500)
+      expect(response.status).to eq(400)
       expect(response.parsed_body).to eq({
         "code" => 1,
         "message" => "Oops"
@@ -100,7 +100,7 @@ RSpec.describe Karimado::Concerns::Controllers::Rendering, type: :controller do
 
       expect(response.status).to eq(401)
       expect(response.parsed_body).to eq({
-        "code" => 10401,
+        "code" => 1_401_000,
         "message" => "Login Required"
       })
     end

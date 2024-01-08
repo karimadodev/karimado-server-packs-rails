@@ -4,12 +4,14 @@ RSpec.describe Karimado::API::Response do
     it "is expected to have code 0" do expect(subject.code).to eq(0) end
     it "is expected to have message \"OK\"" do expect(subject.message).to eq("OK") end
     it "is expected to have data \"{}\"" do expect(subject.data).to eq({}) end
+    it "is expected to have http status code 200" do expect(subject.http_status).to eq(200) end
   end
 
   describe "response :error" do
     subject { described_class.new(:error) }
     it "is expected to have code 1" do expect(subject.code).to eq(1) end
     it "is expected to have message \"ERROR\"" do expect(subject.message).to eq("ERROR") end
+    it "is expected to have http status code 200" do expect(subject.http_status).to eq(400) end
   end
 
   describe ".new" do

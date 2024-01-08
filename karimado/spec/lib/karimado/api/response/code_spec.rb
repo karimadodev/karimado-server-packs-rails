@@ -2,7 +2,9 @@ RSpec.describe Karimado::API::Response::Code do
   [
     [:ok, 0],
     [:error, 1],
-    [:unauthorized, 10401]
+    [:unauthorized, 1_401_000],
+    [:forbidden, 1_403_000],
+    [:internal_server_error, 1_500_000]
   ].each do |(name, value)|
     it "is expected to have code :#{name}" do
       code = described_class.new(name)

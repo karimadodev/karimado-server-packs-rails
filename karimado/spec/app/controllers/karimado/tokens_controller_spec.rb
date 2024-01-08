@@ -22,7 +22,7 @@ RSpec.describe Karimado::TokensController, type: :controller do
     it "is expected to response #failure when user not found" do
       post :create, params: {username: user.uid.next, password:}
 
-      expect(response.status).to eq(500)
+      expect(response.status).to eq(400)
       expect(response.parsed_body["code"]).to eq(1)
       expect(response.parsed_body["message"]).to eq("Invalid username or password")
     end
@@ -30,7 +30,7 @@ RSpec.describe Karimado::TokensController, type: :controller do
     it "is expected to response #failure when password not set" do
       post :create, params: {username: user.uid}
 
-      expect(response.status).to eq(500)
+      expect(response.status).to eq(400)
       expect(response.parsed_body["code"]).to eq(1)
       expect(response.parsed_body["message"]).to eq("Invalid username or password")
     end
@@ -38,7 +38,7 @@ RSpec.describe Karimado::TokensController, type: :controller do
     it "is expected to response #failure when password wrong" do
       post :create, params: {username: user.uid, password: password.next}
 
-      expect(response.status).to eq(500)
+      expect(response.status).to eq(400)
       expect(response.parsed_body["code"]).to eq(1)
       expect(response.parsed_body["message"]).to eq("Invalid username or password")
     end
