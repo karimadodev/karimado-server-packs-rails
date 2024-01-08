@@ -33,9 +33,9 @@ RSpec.describe Karimado::API::Response::Code do
 
   describe ".new" do
     it "is expected to raise error when code not found" do
-      expect { described_class.new(nil) }.to raise_error(ArgumentError)
-      expect { described_class.new(123456) }.to raise_error(ArgumentError)
-      expect { described_class.new(:error_unknown) }.to raise_error(ArgumentError)
+      expect { described_class.new(nil) }.to raise_error(ArgumentError, "invalid code: nil")
+      expect { described_class.new(123456) }.to raise_error(ArgumentError, "invalid code: 123456")
+      expect { described_class.new(:error_unknown) }.to raise_error(ArgumentError, "invalid code: :error_unknown")
     end
   end
 end

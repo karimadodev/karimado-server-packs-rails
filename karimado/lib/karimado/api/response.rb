@@ -25,7 +25,7 @@ module Karimado
         when 1 then 400
         when 1_400_000..1_499_999 then code.div(1_000) - 1_000
         when 1_500_000..1_599_999 then code.div(1_000) - 1_000
-        else raise ArgumentError
+        else raise ArgumentError, "unreachable"
         end
       end
 

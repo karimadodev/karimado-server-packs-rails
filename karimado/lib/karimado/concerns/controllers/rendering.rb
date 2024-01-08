@@ -14,10 +14,10 @@ module Karimado
         def render_failure(code_or_message = nil, message = nil)
           resp =
             if code_or_message.is_a?(Symbol)
-              raise ArgumentError if code_or_message == :ok
+              raise ArgumentError, "invalid failure code: :ok" if code_or_message == :ok
               API::Response.new(code_or_message, message)
             elsif code_or_message.is_a?(Numeric)
-              raise ArgumentError if code_or_message == 0
+              raise ArgumentError, "invalid failure code: 0" if code_or_message == 0
               API::Response.new(code_or_message, message)
             else
               API::Response.new(:error, message || code_or_message)
