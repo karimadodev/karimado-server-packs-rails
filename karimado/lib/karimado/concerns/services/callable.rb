@@ -6,15 +6,6 @@ module Karimado
 
         included do |base|
           attr_accessor :_karimado_result
-
-          base.const_set("Error", Class.new(StandardError) do
-            attr_reader :result
-
-            def initialize(result)
-              @result = result
-              super(@result)
-            end
-          end)
         end
 
         module ClassMethods
@@ -25,13 +16,6 @@ module Karimado
                 instance._karimado_result = value.is_a?(Result) ? value : karimado_success_result(value)
               end
             end._karimado_result
-          end
-
-          def call!(...)
-            call(...).tap do |result|
-              break result if result.success?
-              raise const_get("Error").new(result)
-            end
           end
 
           def karimado_success_result(value)

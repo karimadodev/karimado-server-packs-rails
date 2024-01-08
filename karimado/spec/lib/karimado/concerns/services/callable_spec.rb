@@ -133,49 +133,4 @@ RSpec.describe Karimado::Concerns::Services::Callable, type: :service do
       expect { klass.call! }.to raise_error(NoMethodError)
     end
   end
-
-  describe ".call!" do
-    it "is expected to return last evaluated value" do
-      r = Class.new do
-        include Karimado::Concerns::Services::Callable
-
-        def call
-          1 + 1
-        end
-      end.call!
-
-      expect(r).to be_success
-      expect(r.code).to eq(:ok)
-      expect(r.message).to be_nil
-      expect(r.value).to eq(2)
-    end
-
-    it "is expected to return #ok! result" do
-      r = Class.new do
-        include Karimado::Concerns::Services::Callable
-
-        def call
-          ok!
-          "unreachable"
-        end
-      end.call!
-
-      expect(r).to be_success
-      expect(r.code).to eq(:ok)
-      expect(r.message).to be_nil
-      expect(r.value).to be_nil
-    end
-
-    it "is expected to raise error when #error!" do
-      klass = Class.new do
-        include Karimado::Concerns::Services::Callable
-
-        def call
-          error!
-        end
-      end
-
-      expect { klass.call! }.to raise_error(klass.const_get("Error"))
-    end
-  end
 end
