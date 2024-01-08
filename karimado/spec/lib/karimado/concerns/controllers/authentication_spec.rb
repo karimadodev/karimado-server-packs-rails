@@ -23,7 +23,7 @@ RSpec.describe Karimado::Concerns::Controllers::Authentication, type: :controlle
   end
 
   describe "#authenticate_user!" do
-    it "is expected to return 200 when skip before action" do
+    it "is expected to response 200 when skip before action" do
       get :anonymous
 
       expect(response.status).to eq(200)
@@ -32,7 +32,7 @@ RSpec.describe Karimado::Concerns::Controllers::Authentication, type: :controlle
       expect(controller.__send__(:karimado_access_token)).to be_nil
     end
 
-    it "is expected to return 200 when token set" do
+    it "is expected to response 200 when token set" do
       token = session.access_token(expires_in: 1.hour)
       request.headers["Authorization"] = "Bearer #{token}"
       get :authenticated
@@ -43,7 +43,7 @@ RSpec.describe Karimado::Concerns::Controllers::Authentication, type: :controlle
       expect(controller.__send__(:karimado_access_token)).to be_a(Karimado::UserSessionAccessToken)
     end
 
-    it "is expected to return 401 when token not set" do
+    it "is expected to response 401 when token not set" do
       get :authenticated
 
       expect(response.status).to eq(401)
@@ -52,7 +52,7 @@ RSpec.describe Karimado::Concerns::Controllers::Authentication, type: :controlle
       expect(controller.__send__(:karimado_access_token)).to be_nil
     end
 
-    it "is expected to return 401 when token expired" do
+    it "is expected to response 401 when token expired" do
       token = session.access_token(expires_in: 1.hour)
       Timecop.freeze(2.hours.from_now)
       request.headers["Authorization"] = "Bearer #{token}"
@@ -64,7 +64,7 @@ RSpec.describe Karimado::Concerns::Controllers::Authentication, type: :controlle
       expect(controller.__send__(:karimado_access_token)).to be_nil
     end
 
-    it "is expected to return 401 when token format invalid" do
+    it "is expected to response 401 when token format invalid" do
       request.headers["Authorization"] = "Bearer abcdef"
       get :authenticated
 

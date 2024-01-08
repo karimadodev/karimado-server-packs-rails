@@ -3,9 +3,12 @@ module Karimado
     module Token
       class CreateService < ApplicationService
         def call(username:, password:)
-          # user = User.find_or_create_by!(uid: "karimado")
-          # session = user.user_sessions.create!
-          # session.authn_token
+          user = User.find_by(uid: username)
+          fail!("Invalid username or password") unless user.present?
+          fail!("Invalid username or password") unless user.authenticate(password)
+
+          session = user.user_sessions.create!
+          session.authn_token
         end
       end
     end

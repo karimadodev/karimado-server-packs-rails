@@ -38,6 +38,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_01_092045) do
   create_table "karimado_users", force: :cascade do |t|
     t.string "public_id", null: false
     t.string "uid", null: false
+    t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["public_id"], name: "index_karimado_users_on_public_id", unique: true
