@@ -24,10 +24,10 @@ module Karimado
 
           def karimado_failure_result(code_or_message, message)
             if code_or_message.is_a?(Symbol)
-              raise ArgumentError, "invalid failure code: :ok" if code_or_message == :ok
+              raise ArgumentError, "failure code cannot be :ok" if code_or_message == :ok
               Result.new(code_or_message, message)
             elsif code_or_message.is_a?(Numeric)
-              raise ArgumentError, "invalid failure code: 0" if code_or_message == 0
+              raise ArgumentError, "failure code cannot be 0" if code_or_message == 0
               Result.new(code_or_message, message)
             else
               Result.new(:error, message || code_or_message)

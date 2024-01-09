@@ -26,12 +26,12 @@ RSpec.describe Karimado::UserSessionAccessToken, type: :model do
       token = session.access_token(expires_in: 2.hours)
 
       Timecop.freeze(4.hours.from_now)
-      expect { described_class.decode(token) }.to raise_error(Karimado::Errors::TokenExpired)
+      expect { described_class.decode(token) }.to raise_error(Karimado::Errors::TokenExpired, "token has expired")
     end
 
     it "is expected to raise error when decode refresh token" do
       token = session.refresh_token(expires_in: 2.hours)
-      expect { described_class.decode(token) }.to raise_error(Karimado::Errors::InvalidToken, /invalid grant type/)
+      expect { described_class.decode(token) }.to raise_error(Karimado::Errors::InvalidToken, "invalid token: wrong grant type")
     end
   end
 end

@@ -15,7 +15,7 @@ module Karimado
 
         def initialize(value)
           @value = value.is_a?(Symbol) ? SYMBOL_CODES[value] : value
-          raise ArgumentError, "invalid code: #{value.inspect}" unless SYMBOLS.key?(@value)
+          raise ArgumentError, "unknown code: #{value.inspect}" unless SYMBOLS.key?(@value)
         end
 
         def name

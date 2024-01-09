@@ -26,7 +26,7 @@ RSpec.describe Karimado::UserSessionRefreshToken, type: :model do
       token = session.refresh_token(expires_in: 2.hours)
 
       Timecop.freeze(4.hours.from_now)
-      expect { described_class.decode(token) }.to raise_error(Karimado::Errors::TokenExpired)
+      expect { described_class.decode(token) }.to raise_error(Karimado::Errors::TokenExpired, "token has expired")
     end
   end
 end

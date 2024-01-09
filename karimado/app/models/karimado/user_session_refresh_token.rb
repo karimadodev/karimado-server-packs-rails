@@ -21,14 +21,14 @@ module Karimado
       def decode(token)
         begin
           decoded_token = ::JWT.decode(token, hmac_secret, true, {algorithm: "HS256"})[0]
-        rescue ::JWT::ExpiredSignature => e
-          raise Errors::TokenExpired, e.message
+        rescue ::JWT::ExpiredSignature
+          raise Errors::TokenExpired, "token has expired"
         rescue ::JWT::DecodeError => e
-          raise Errors::InvalidToken, e.message
+          raise Errors::InvalidToken, "invalid token: #{e.message}"
         end
 
         if decoded_token["grant_type"] != "refresh_token"
-          raise Errors::InvalidToken, "invalid grant type"
+          raise Errors::InvalidToken, "invalid token: wrong grant type"
         end
 
         new(decoded_token)

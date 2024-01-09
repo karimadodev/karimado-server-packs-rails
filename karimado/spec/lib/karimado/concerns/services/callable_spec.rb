@@ -121,8 +121,8 @@ RSpec.describe Karimado::Concerns::Services::Callable, type: :service do
         end
       end
 
-      expect { klass.call(:ok) }.to raise_error(ArgumentError, "invalid failure code: :ok")
-      expect { klass.call(0) }.to raise_error(ArgumentError, "invalid failure code: 0")
+      expect { klass.call(:ok) }.to raise_error(ArgumentError, "failure code cannot be :ok")
+      expect { klass.call(0) }.to raise_error(ArgumentError, "failure code cannot be 0")
     end
 
     it "is expected to raise error when no #call method" do
