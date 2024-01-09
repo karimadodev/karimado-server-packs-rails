@@ -1,6 +1,6 @@
 module Karimado
   class TokensController < ApplicationController
-    skip_before_action :authenticate_user!, only: [:create, :refresh]
+    skip_before_action :authenticate_user!
 
     def create
       result = Authn::Token::CreateService.call(
@@ -27,7 +27,7 @@ module Karimado
 
     def revoke
       result = Authn::Token::RevokeService.call(
-        access_token: karimado_access_token
+        refresh_token: params[:token]
       )
       if result.success?
         render_success(result.value)

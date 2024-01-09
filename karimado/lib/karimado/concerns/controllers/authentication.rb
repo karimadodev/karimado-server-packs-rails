@@ -11,7 +11,13 @@ module Karimado
         private
 
         def authenticate_user!
-          if current_user.nil?
+          if current_user_session.nil?
+            resp = API::Response.new(:unauthorized)
+            render(json: resp.to_json, status: resp.http_status)
+            return
+          end
+
+          if current_user_session.discarded?
             resp = API::Response.new(:unauthorized)
             render(json: resp.to_json, status: resp.http_status)
           end

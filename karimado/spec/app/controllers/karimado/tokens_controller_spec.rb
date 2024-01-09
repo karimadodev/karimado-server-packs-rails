@@ -45,10 +45,11 @@ RSpec.describe Karimado::TokensController, type: :controller do
   end
 
   describe "#refresh" do
-    let(:session) { FactoryBot.create(:user_session) }
+    let!(:session) { FactoryBot.create(:user_session) }
+    let!(:token) { session.refresh_token(expires_in: 2.hours) }
 
     it "is expected to response #success" do
-      post :refresh, params: {token: session.refresh_token(expires_in: 2.hours)}
+      post :refresh, params: {token:}
 
       expect(response.status).to eq(200)
       expect(response.parsed_body["code"]).to eq(0)
@@ -62,7 +63,6 @@ RSpec.describe Karimado::TokensController, type: :controller do
     end
 
     it "is expected to response #failure when token expired" do
-      token = session.refresh_token(expires_in: 2.hours)
       Timecop.freeze(4.hours.from_now)
       post :refresh, params: {token:}
 
@@ -77,6 +77,32 @@ RSpec.describe Karimado::TokensController, type: :controller do
       expect(response.status).to eq(400)
       expect(response.parsed_body["code"]).to eq(1)
       expect(response.parsed_body["message"]).to match(/invalid token: /)
+    end
+
+    it "is expected to response #failure when token has been revoked" do
+      post :revoke, params: {token:}
+      post :refresh, params: {token:}
+
+      expect(response.status).to eq(400)
+      expect(response.parsed_body["code"]).to eq(1)
+      expect(response.parsed_body["message"]).to match("token has been revoked")
+    end
+  end
+
+  describe "#revoke" do
+    let!(:session) { FactoryBot.create(:user_session) }
+    let!(:token) { session.refresh_token(expires_in: 2.hours) }
+
+    it "is expected to response #success" do
+      post :revoke, params: {token:}
+
+      expect(response.status).to eq(200)
+      expect(response.parsed_body["code"]).to eq(0)
+      expect(response.parsed_body["message"]).to eq("OK")
+      expect(response.parsed_body["data"]).to eq({})
+
+      session.reload
+      expect(session).to be_discarded
     end
   end
 end
