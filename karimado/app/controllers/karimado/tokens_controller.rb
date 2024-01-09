@@ -1,6 +1,6 @@
 module Karimado
   class TokensController < ApplicationController
-    skip_before_action :authenticate_user!
+    skip_before_action :karimado_authenticate!
 
     def create
       result = Authn::Token::CreateService.call(

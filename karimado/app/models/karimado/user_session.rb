@@ -10,9 +10,6 @@ module Karimado
     has_secure_token :refresh_token_base
 
     def authn_token
-      access_token_expires_in = Karimado.configuration.authn.access_token_expires_in
-      refresh_token_expires_in = Karimado.configuration.authn.refresh_token_expires_in
-
       {
         access_token: access_token(expires_in: access_token_expires_in),
         access_token_expires_in:,
@@ -21,12 +18,22 @@ module Karimado
       }
     end
 
+    private
+
     def access_token(expires_in:)
       UserSessionAccessToken.encode(self, expires_in:)
     end
 
     def refresh_token(expires_in:)
       UserSessionRefreshToken.encode(self, expires_in:)
+    end
+
+    def access_token_expires_in
+      Karimado.configuration.authn.access_token_expires_in
+    end
+
+    def refresh_token_expires_in
+      Karimado.configuration.authn.refresh_token_expires_in
     end
   end
 end
