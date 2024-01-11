@@ -8,7 +8,10 @@ module Karimado
           error!("token has been revoked") if session.discarded?
           error!("token has been revoked") if session.refresh_token_base != token.refresh_token
 
-          session.regenerate_refresh_token_base
+          ActiveRecord::Base.transaction do
+            session.regenerate_refresh_token_base
+            session.regenerate_access_token_base
+          end
           session.authn_token
         end
 

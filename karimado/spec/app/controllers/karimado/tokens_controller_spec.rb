@@ -49,6 +49,8 @@ RSpec.describe Karimado::TokensController, type: :controller do
     let!(:token) { session.authn_token[:refresh_token] }
 
     it "is expected to response #success" do
+      refresh_token_base = session.refresh_token_base
+      access_token_base = session.access_token_base
       post :refresh, params: {token:}
 
       expect(response.status).to eq(200)
@@ -60,6 +62,10 @@ RSpec.describe Karimado::TokensController, type: :controller do
         "refresh_token",
         "refresh_token_expires_in"
       )
+
+      session.reload
+      expect(session.refresh_token_base).not_to eq(refresh_token_base)
+      expect(session.access_token_base).not_to eq(access_token_base)
     end
 
     it "is expected to response #failure when token expired" do

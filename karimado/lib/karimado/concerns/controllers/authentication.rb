@@ -22,6 +22,9 @@ module Karimado
           if session.nil? || session.discarded?
             resp = API::Response.new(:unauthorized)
             render(json: resp.to_json, status: resp.http_status)
+          elsif session.access_token_base != token.access_token
+            resp = API::Response.new(:unauthorized)
+            render(json: resp.to_json, status: resp.http_status)
           end
         end
 

@@ -1,5 +1,6 @@
 RSpec.describe Karimado::Concerns::Controllers::Authentication, type: :controller do
   let(:session) { FactoryBot.create(:user_session) }
+  let(:authn_token) { session.authn_token }
 
   controller(ActionController::API) do
     include Karimado::Concerns::Controllers::Authentication
@@ -31,7 +32,7 @@ RSpec.describe Karimado::Concerns::Controllers::Authentication, type: :controlle
     end
 
     it "is expected to response 200 when token set" do
-      token = session.authn_token[:access_token]
+      token = authn_token[:access_token]
       request.headers["Authorization"] = "Bearer #{token}"
       get :authenticated
 
@@ -55,8 +56,9 @@ RSpec.describe Karimado::Concerns::Controllers::Authentication, type: :controlle
     end
 
     it "is expected to response 401 when token expired" do
-      token = session.authn_token[:access_token]
+      token = authn_token[:access_token]
       Timecop.freeze(2.hours.from_now)
+
       request.headers["Authorization"] = "Bearer #{token}"
       get :authenticated
 
@@ -64,9 +66,23 @@ RSpec.describe Karimado::Concerns::Controllers::Authentication, type: :controlle
       expect(controller.__send__(:karimado_access_token)).to be_nil
     end
 
+    it "is expected to response 401 when token refresh" do
+      token = authn_token[:access_token]
+      result = Karimado::Authn::Token::RefreshService.call(refresh_token: authn_token[:refresh_token])
+      expect(result).to be_success
+
+      request.headers["Authorization"] = "Bearer #{token}"
+      get :authenticated
+
+      expect(response.status).to eq(401)
+      # expect(controller.__send__(:karimado_access_token)).to be_nil
+    end
+
     it "is expected to response 401 when token revoked" do
-      token = session.authn_token[:access_token]
-      session.discard!
+      token = authn_token[:access_token]
+      result = Karimado::Authn::Token::RevokeService.call(refresh_token: authn_token[:refresh_token])
+      expect(result).to be_success
+
       request.headers["Authorization"] = "Bearer #{token}"
       get :authenticated
 
