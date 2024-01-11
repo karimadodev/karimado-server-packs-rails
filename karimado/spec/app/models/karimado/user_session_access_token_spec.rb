@@ -25,7 +25,7 @@ RSpec.describe Karimado::UserSessionAccessToken, type: :model do
     it "is expected to raise error when expired" do
       token = session.authn_token[:access_token]
 
-      Timecop.freeze(2.hours.from_now)
+      Timecop.freeze(Karimado.config.authn.access_token_lifetime.from_now + 1)
       expect { described_class.decode(token) }.to raise_error(Karimado::Errors::TokenExpired, "token has expired")
     end
 

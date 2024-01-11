@@ -19,10 +19,10 @@ RSpec.describe Karimado::UserSession, type: :model do
 
     it "is expected to have :expires_in" do
       authn_token = subject.authn_token
-      expect(authn_token[:access_token_expires_in]).to eq(1.hour)
-      expect(authn_token[:refresh_token_expires_in]).to eq(1.day)
+      expect(authn_token[:access_token_expires_in]).to eq(2.hours)
+      expect(authn_token[:refresh_token_expires_in]).to eq(24.hours)
 
-      Timecop.freeze((1.day + 1.hour).from_now)
+      Timecop.freeze(24.hours.from_now + 1)
       expect {
         Karimado::UserSessionAccessToken.decode(authn_token[:access_token])
       }.to raise_error(Karimado::Errors::TokenExpired, "token has expired")

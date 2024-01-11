@@ -4,7 +4,8 @@ require "jwt"
 require "karimado/api/response/code/reasons"
 require "karimado/api/response/code"
 require "karimado/api/response"
-require "karimado/configuration"
+require "karimado/config/authn"
+require "karimado/config"
 require "karimado/engine"
 require "karimado/errors"
 require "karimado/version"
@@ -16,12 +17,12 @@ require "karimado/concerns/services/callable"
 
 module Karimado
   class << self
-    def configuration
-      @configuration ||= Configuration.new
+    def config
+      @config ||= Config.new
     end
 
     def configure
-      yield configuration
+      yield config
     end
   end
 end

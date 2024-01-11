@@ -57,7 +57,7 @@ RSpec.describe Karimado::Concerns::Controllers::Authentication, type: :controlle
 
     it "is expected to response 401 when token expired" do
       token = authn_token[:access_token]
-      Timecop.freeze(2.hours.from_now)
+      Timecop.freeze(Karimado.config.authn.access_token_lifetime.from_now + 1)
 
       request.headers["Authorization"] = "Bearer #{token}"
       get :authenticated

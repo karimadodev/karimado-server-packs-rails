@@ -23,6 +23,10 @@ module Karimado
       }
     end
 
+    def valid_access_token?(token)
+      access_token_base == token.access_token
+    end
+
     def valid_refresh_token?(token)
       refresh_token_base == token.refresh_token
     end
@@ -43,15 +47,15 @@ module Karimado
     end
 
     def access_token_expires_in
-      Karimado.configuration.authn.access_token_expires_in
+      Karimado.config.authn.access_token_lifetime
     end
 
     def refresh_token_expires_in
-      Karimado.configuration.authn.refresh_token_expires_in
+      Karimado.config.authn.refresh_token_lifetime
     end
 
     def refresh_token_grace_period
-      30.seconds
+      Karimado.config.authn.refresh_token_grace_period
     end
   end
 end

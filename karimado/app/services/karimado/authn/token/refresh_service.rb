@@ -7,17 +7,18 @@ module Karimado
           session = token.session
           error!("token has been revoked") if session.discarded?
 
-          if session.valid_refresh_token?(token)
-            ActiveRecord::Base.transaction do
+          session.with_lock do
+            if session.valid_refresh_token?(token)
               session.regenerate_refresh_token_base
               session.regenerate_access_token_base
+            elsif session.valid_previous_refresh_token?(token)
+              nil
+            else
+              error!("token has been revoked")
             end
-            session.authn_token
-          elsif session.valid_previous_refresh_token?(token)
-            session.authn_token
-          else
-            error!("token has been revoked")
           end
+
+          session.authn_token
         end
 
         private
