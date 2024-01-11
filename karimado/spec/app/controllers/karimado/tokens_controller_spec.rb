@@ -74,7 +74,7 @@ RSpec.describe Karimado::TokensController, type: :controller do
 
       expect(response.status).to eq(400)
       expect(response.parsed_body["code"]).to eq(1)
-      expect(response.parsed_body["message"]).to match("token has expired")
+      expect(response.parsed_body["message"]).to eq("token has expired")
     end
 
     it "is expected to response #failure when token not set" do
@@ -94,7 +94,7 @@ RSpec.describe Karimado::TokensController, type: :controller do
 
       expect(response.status).to eq(400)
       expect(response.parsed_body["code"]).to eq(1)
-      expect(response.parsed_body["message"]).to match("token has been revoked")
+      expect(response.parsed_body["message"]).to eq("token has been revoked")
     end
 
     it "is expected to response #success when token has been rotated but in a grace period" do
@@ -129,7 +129,7 @@ RSpec.describe Karimado::TokensController, type: :controller do
 
       expect(response.status).to eq(400)
       expect(response.parsed_body["code"]).to eq(1)
-      expect(response.parsed_body["message"]).to match("token has been revoked")
+      expect(response.parsed_body["message"]).to eq("token has been revoked")
     end
   end
 
@@ -147,6 +147,17 @@ RSpec.describe Karimado::TokensController, type: :controller do
 
       session.reload
       expect(session).to be_discarded
+    end
+
+    it "is expected to response #failure when token has been rotated" do
+      post :refresh, params: {token:}
+      expect(response.status).to eq(200)
+
+      post :revoke, params: {token:}
+
+      expect(response.status).to eq(400)
+      expect(response.parsed_body["code"]).to eq(1)
+      expect(response.parsed_body["message"]).to eq("token has been revoked")
     end
   end
 end

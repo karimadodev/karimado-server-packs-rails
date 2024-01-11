@@ -7,7 +7,12 @@ module Karimado
           session = token.session
           ok! if session.discarded?
 
-          session.discard!
+          if session.valid_refresh_token?(token)
+            session.discard!
+          else
+            error!("token has been revoked")
+          end
+
           nil
         end
 
