@@ -66,7 +66,7 @@ RSpec.describe Karimado::Concerns::Controllers::Authentication, type: :controlle
       expect(controller.__send__(:karimado_access_token)).to be_nil
     end
 
-    it "is expected to response 401 when token refresh" do
+    it "is expected to response 401 when token rotated" do
       token = authn_token[:access_token]
       result = Karimado::Authn::Token::RefreshService.call(refresh_token: authn_token[:refresh_token])
       expect(result).to be_success

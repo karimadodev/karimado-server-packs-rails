@@ -96,15 +96,40 @@ RSpec.describe Karimado::TokensController, type: :controller do
       expect(response.parsed_body["message"]).to match("token has been revoked")
     end
 
-    it "is expected to response #failure when token has been used" do
+    it "is expected to response #failure when token has been rotated" do
       post :refresh, params: {token:}
       expect(response.status).to eq(200)
 
+      Timecop.freeze(1.minute.from_now)
       post :refresh, params: {token:}
 
       expect(response.status).to eq(400)
       expect(response.parsed_body["code"]).to eq(1)
       expect(response.parsed_body["message"]).to match("token has been revoked")
+    end
+
+    it "is expected to response #success when token has been rotated but in a grace period" do
+      post :refresh, params: {token:}
+      expect(response.status).to eq(200)
+
+      session.reload
+      refresh_token_base = session.refresh_token_base
+      access_token_base = session.access_token_base
+      post :refresh, params: {token:}
+
+      expect(response.status).to eq(200)
+      expect(response.parsed_body["code"]).to eq(0)
+      expect(response.parsed_body["message"]).to eq("OK")
+      expect(response.parsed_body["data"].keys).to contain_exactly(
+        "access_token",
+        "access_token_expires_in",
+        "refresh_token",
+        "refresh_token_expires_in"
+      )
+
+      session.reload
+      expect(session.refresh_token_base).to eq(refresh_token_base)
+      expect(session.access_token_base).to eq(access_token_base)
     end
   end
 

@@ -26,6 +26,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_01_092045) do
     t.string "public_id", null: false
     t.string "access_token_base", null: false
     t.string "refresh_token_base", null: false
+    t.string "previous_refresh_token_base"
+    t.datetime "previous_refresh_token_base_revoked_at"
     t.datetime "discarded_at"
     t.integer "user_id", null: false
     t.datetime "created_at", null: false

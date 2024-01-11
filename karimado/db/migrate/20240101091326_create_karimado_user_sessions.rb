@@ -4,6 +4,8 @@ class CreateKarimadoUserSessions < ActiveRecord::Migration[7.1]
       t.string :public_id, null: false, index: {unique: true}
       t.string :access_token_base, null: false
       t.string :refresh_token_base, null: false
+      t.string :previous_refresh_token_base
+      t.datetime :previous_refresh_token_base_revoked_at
       t.datetime :discarded_at, index: true
 
       t.references :user, null: false, foreign_key: false
