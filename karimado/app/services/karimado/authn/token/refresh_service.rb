@@ -8,7 +8,7 @@ module Karimado
           error!("token has been revoked") if session.discarded?
 
           session.with_lock do
-            if session.valid_refresh_token?(token)
+            if session.valid_current_refresh_token?(token)
               session.regenerate_refresh_token_base
               session.regenerate_access_token_base
             elsif session.valid_previous_refresh_token?(token)

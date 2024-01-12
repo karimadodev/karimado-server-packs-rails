@@ -23,11 +23,11 @@ module Karimado
       }
     end
 
-    def valid_access_token?(token)
+    def valid_current_access_token?(token)
       access_token_base == token.access_token
     end
 
-    def valid_refresh_token?(token)
+    def valid_current_refresh_token?(token)
       refresh_token_base == token.refresh_token
     end
 

@@ -31,4 +31,23 @@ RSpec.describe Karimado::UserSession, type: :model do
       }.to raise_error(Karimado::Errors::TokenExpired, "token has expired")
     end
   end
+
+  describe "#valid_previous_refresh_token" do
+    it "is expected to be truthy" do
+      authn_token = subject.authn_token
+      token = Karimado::UserSessionRefreshToken.decode(authn_token[:refresh_token])
+      subject.regenerate_refresh_token_base
+
+      expect(subject.valid_previous_refresh_token?(token)).to be_truthy
+    end
+
+    it "is expected to be falsey after the grace period" do
+      authn_token = subject.authn_token
+      token = Karimado::UserSessionRefreshToken.decode(authn_token[:refresh_token])
+      subject.regenerate_refresh_token_base
+
+      Timecop.freeze(Karimado.config.authn.refresh_token_grace_period.from_now + 1)
+      expect(subject.valid_previous_refresh_token?(token)).to be_falsey
+    end
+  end
 end

@@ -22,7 +22,7 @@ module Karimado
           if session.nil? || session.discarded?
             resp = API::Response.new(:unauthorized)
             render(json: resp.to_json, status: resp.http_status)
-          elsif !session.valid_access_token?(token)
+          elsif !session.valid_current_access_token?(token)
             resp = API::Response.new(:unauthorized)
             render(json: resp.to_json, status: resp.http_status)
           end
