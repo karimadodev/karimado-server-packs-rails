@@ -11,7 +11,7 @@ module Karimado
 
     before_save -> {
       self.previous_refresh_token_base = refresh_token_base_in_database
-      self.previous_refresh_token_base_revoked_at = Time.now
+      self.previous_refresh_token_base_revoked_at = Time.now if refresh_token_base_in_database
     }, if: :will_save_change_to_refresh_token_base?
 
     def authn_token

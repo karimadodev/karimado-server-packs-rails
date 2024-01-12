@@ -1,6 +1,20 @@
 RSpec.describe Karimado::TokensController, type: :controller do
   routes { Karimado::Engine.routes }
 
+  describe "routing", type: :routing do
+    it "is expected to have route /auth/token" do
+      expect(post: "/karimado/auth/token").to be_routable
+    end
+
+    it "is expected to have route /auth/token/refresh" do
+      expect(post: "/karimado/auth/token/refresh").to be_routable
+    end
+
+    it "is expected to have route /auth/token/revoke" do
+      expect(post: "/karimado/auth/token/revoke").to be_routable
+    end
+  end
+
   describe "#create" do
     let(:password) { SecureRandom.base58 }
     let(:user) { FactoryBot.create(:user, password:) }

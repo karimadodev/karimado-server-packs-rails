@@ -25,3 +25,4 @@ gem "solargraph"
 # web development
 gem "puma"
 gem "sqlite3"
+gem "rack-cors"
