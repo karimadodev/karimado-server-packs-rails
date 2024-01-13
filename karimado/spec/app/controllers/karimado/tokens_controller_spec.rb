@@ -60,12 +60,14 @@ RSpec.describe Karimado::TokensController, type: :controller do
 
   describe "#refresh" do
     let!(:session) { FactoryBot.create(:user_session) }
-    let!(:token) { session.authn_token[:refresh_token] }
+    let!(:authn_token) { session.authn_token }
+    let!(:access_token) { authn_token[:access_token] }
+    let!(:refresh_token) { authn_token[:refresh_token] }
 
     it "is expected to response #success" do
       refresh_token_base = session.refresh_token_base
       access_token_base = session.access_token_base
-      post :refresh, params: {token:}
+      post :refresh, params: {token: refresh_token}
 
       expect(response.status).to eq(200)
       expect(response.parsed_body["code"]).to eq(0)
@@ -83,13 +85,13 @@ RSpec.describe Karimado::TokensController, type: :controller do
     end
 
     it "is expected to response #success when token has been rotated but in a grace period" do
-      post :refresh, params: {token:}
+      post :refresh, params: {token: refresh_token}
       expect(response.status).to eq(200)
 
       session.reload
       refresh_token_base = session.refresh_token_base
       access_token_base = session.access_token_base
-      post :refresh, params: {token:}
+      post :refresh, params: {token: refresh_token}
 
       expect(response.status).to eq(200)
       expect(response.parsed_body["code"]).to eq(0)
@@ -108,7 +110,7 @@ RSpec.describe Karimado::TokensController, type: :controller do
 
     it "is expected to response #failure when token expired" do
       Timecop.freeze(Karimado.config.authn.refresh_token_lifetime.from_now + 1)
-      post :refresh, params: {token:}
+      post :refresh, params: {token: refresh_token}
 
       expect(response.status).to eq(400)
       expect(response.parsed_body["code"]).to eq(1)
@@ -124,11 +126,11 @@ RSpec.describe Karimado::TokensController, type: :controller do
     end
 
     it "is expected to response #failure when token has been rotated" do
-      post :refresh, params: {token:}
+      post :refresh, params: {token: refresh_token}
       expect(response.status).to eq(200)
 
       Timecop.freeze(Karimado.config.authn.refresh_token_grace_period.from_now + 1)
-      post :refresh, params: {token:}
+      post :refresh, params: {token: refresh_token}
 
       expect(response.status).to eq(400)
       expect(response.parsed_body["code"]).to eq(1)
@@ -136,10 +138,10 @@ RSpec.describe Karimado::TokensController, type: :controller do
     end
 
     it "is expected to response #failure when token has been revoked" do
-      post :revoke, params: {token:}
+      post :revoke, params: {token: access_token}
       expect(response.status).to eq(200)
 
-      post :refresh, params: {token:}
+      post :refresh, params: {token: refresh_token}
 
       expect(response.status).to eq(400)
       expect(response.parsed_body["code"]).to eq(1)
@@ -149,10 +151,12 @@ RSpec.describe Karimado::TokensController, type: :controller do
 
   describe "#revoke" do
     let!(:session) { FactoryBot.create(:user_session) }
-    let!(:token) { session.authn_token[:refresh_token] }
+    let!(:authn_token) { session.authn_token }
+    let!(:access_token) { authn_token[:access_token] }
+    let!(:refresh_token) { authn_token[:refresh_token] }
 
     it "is expected to response #success" do
-      post :revoke, params: {token:}
+      post :revoke, params: {token: access_token}
 
       expect(response.status).to eq(200)
       expect(response.parsed_body["code"]).to eq(0)
@@ -165,7 +169,7 @@ RSpec.describe Karimado::TokensController, type: :controller do
 
     it "is expected to response #failure when token expired" do
       Timecop.freeze(Karimado.config.authn.refresh_token_lifetime.from_now + 1)
-      post :revoke, params: {token:}
+      post :revoke, params: {token: access_token}
 
       expect(response.status).to eq(400)
       expect(response.parsed_body["code"]).to eq(1)
@@ -173,7 +177,7 @@ RSpec.describe Karimado::TokensController, type: :controller do
     end
 
     it "is expected to response #failure when token not set" do
-      post :revoke, params: {}
+      post :revoke
 
       expect(response.status).to eq(400)
       expect(response.parsed_body["code"]).to eq(1)
@@ -181,10 +185,10 @@ RSpec.describe Karimado::TokensController, type: :controller do
     end
 
     it "is expected to response #failure when token has been rotated" do
-      post :refresh, params: {token:}
+      post :refresh, params: {token: refresh_token}
       expect(response.status).to eq(200)
 
-      post :revoke, params: {token:}
+      post :revoke, params: {token: access_token}
 
       expect(response.status).to eq(400)
       expect(response.parsed_body["code"]).to eq(1)

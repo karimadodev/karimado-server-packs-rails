@@ -31,8 +31,7 @@ module Karimado
         def karimado_access_token
           return @_karimado_access_token if defined?(@_karimado_access_token)
           @_karimado_access_token = begin
-            header = request.headers["Authorization"].to_s
-            token = header.sub(/^Bearer\s+/, "")
+            token = karimado_authorization_bearer_token
             token.blank? ? nil : (
               begin
                 UserSessionAccessToken.decode(token)
@@ -41,6 +40,10 @@ module Karimado
               end
             )
           end
+        end
+
+        def karimado_authorization_bearer_token
+          request.headers["Authorization"].to_s.sub(/^Bearer\s+/, "")
         end
       end
     end

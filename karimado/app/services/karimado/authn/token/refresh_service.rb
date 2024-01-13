@@ -5,6 +5,7 @@ module Karimado
         def call(refresh_token:)
           token = decode_token!(refresh_token)
           session = token.session
+          error!("token has been revoked") if session.nil?
           error!("token has been revoked") if session.discarded?
 
           session.with_lock do

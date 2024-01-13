@@ -27,7 +27,7 @@ module Karimado
 
     def revoke
       result = Authn::Token::RevokeService.call(
-        refresh_token: params[:token]
+        access_token: params[:token] || karimado_authorization_bearer_token
       )
       if result.success?
         render_success(result.value)

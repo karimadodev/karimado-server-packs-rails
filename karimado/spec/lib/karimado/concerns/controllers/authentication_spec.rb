@@ -80,7 +80,7 @@ RSpec.describe Karimado::Concerns::Controllers::Authentication, type: :controlle
 
     it "is expected to response 401 when token revoked" do
       token = authn_token[:access_token]
-      result = Karimado::Authn::Token::RevokeService.call(refresh_token: authn_token[:refresh_token])
+      result = Karimado::Authn::Token::RevokeService.call(access_token: token)
       expect(result).to be_success
 
       request.headers["Authorization"] = "Bearer #{token}"
