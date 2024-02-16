@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.homepage = "https://github.com/souk4711/karimado-server-packs-rails"
   spec.summary = "Karimado Server Packages + Rails"
   spec.description = "Karimado Server Packages + Rails"
-  spec.license = "LGPL"
+  spec.license = "LGPL-3.0-only"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the "allowed_push_host"
   # to allow pushing to a single host or delete this section to allow pushing to any host.
