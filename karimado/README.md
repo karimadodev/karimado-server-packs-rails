@@ -2,16 +2,32 @@
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add following line to `Gemfile` file and execute `bundle install` to update dependencies:
 
 ```ruby
 gem 'karimado'
 ```
 
-And then execute:
+Run following command to copy migrations into the application:
 
 ```console
-$ bundle install
+$ rails karimado:install:migrations
+Copied migration 20240217125602_create_karimado_users.karimado.rb from karimado
+Copied migration 20240217125603_create_karimado_user_sessions.karimado.rb from karimado
+Copied migration 20240217125604_create_karimado_user_authentications.karimado.rb from karimado
+
+$ rails db:migrate
+== 20240217130429 CreateKarimadoUsers: migrating ==============================
+-- create_table(:karimado_users)
+   -> 0.0440s
+== 20240217130429 CreateKarimadoUsers: migrated (0.0441s) =====================
+...
+```
+
+Add this line to `config/route.rb` file and restart rails server:
+
+```ruby
+mount Karimado::Engine => "/karimado"
 ```
 
 ## Development
