@@ -1,4 +1,4 @@
-# Karimado
+# karimado-server-packs-rails#karimado
 
 ## Installation
 
